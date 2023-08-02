@@ -3,7 +3,38 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <unordered_map>
+#include <bits/stdc++.h>
 using namespace std;
+
+void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorithm, using bad character heuristic
+    int count = 0; //# occurrences in the text
+    int patSize = pattern.length();
+    int txtSize = txt.length();
+    unordered_map<char, int> badChar; //this is used to shift characters if found
+
+    for (int i = 0; i < patSize; i++) {
+        badChar[pattern[i]] = max(1, (patSize - i - 1));
+    }
+
+    int i = patSize - 1;
+    while (i < txtSize) { //boyer-moore goes backwards to search, and if a character is not found, shifts pattern until a char found in txt
+        int j = patSize - 1;
+        while (j >= 0 && txt[i] == pattern[j]) {
+            i--;
+            j--;
+        }
+
+        if (j == -1) {
+            count++;
+            i += patSize + 1;
+        }
+        else {
+            i += max(badChar[txt[i]], (patSize - j));
+        }
+    }
+    cout << "Occurences: " << count << " ";
+}
 
 // A function used to load the contents of a .txt file, returns a string
 string LoadFile(string filename) {
@@ -54,10 +85,14 @@ int main() {
         case 2:
             cout << "Enter a string to 'BM' Search:" << endl;
             cin >> word;
-            // BMSearch(file_content, word);
+            clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
+            start = clock(); 
+            BMSearch(file_content, word);
+            stop = clock();
+            double duration = double(stop - start) / double(CLOCKS_PER_SEC);
+            cout << "Time: " << fixed << setprecision(7) << duration << " seconds";
         // Exits the program
-        case 3:
-            break;
+        
     }
 
     return 0;
