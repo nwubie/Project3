@@ -1,4 +1,4 @@
-#include <iomanip>
+\#include <iomanip>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,7 +18,7 @@ void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorith
     }
 
     int i = patSize - 1;
-    while (i < txtSize) { //boyer-moore goes backwards to search, and if a character is not found, shifts pattern until a char found in txt
+    while (i < txtSize) {
         int j = patSize - 1;
         while (j >= 0 && txt[i] == pattern[j]) {
             i--;
@@ -37,31 +37,36 @@ void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorith
 }
 
 // A function used to load the contents of a .txt file, returns a string
-string LoadFile(string filename) {
+bool LoadFile(string filename, string& file_content) {
     ifstream file(filename);
     // If the file exists
     if(file.is_open())
     {
         string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-        return text;
+        file_content = text;
+        cout << text << endl << endl;
+        return true;
     }
     // If the file does not exist
     else
     {
-        cout << "The file '" << filename << "'" << " does not exist!" << endl;
-        return "";
+        cout << "The file '" << filename << "'" << " does not exist!" << endl << endl;
+        return false;
     }
 }
 
 int main() {
     // Prompts user to input a .txt file to load, file must be in 'cmake-build-debug' folder
     string filename;
-    cout << "Load a .txt file:" << endl;
-    cin >> filename;
-
-    string file_content = LoadFile(filename);
-    cout << file_content << endl;
-
+    string file_content = "";
+    bool validFile = false;
+    do {
+        cout << "Load a .txt file:" << endl;
+        cin >> filename;
+        
+        validFile = LoadFile(filename, file_content);
+    } while (!validFile);
+    
     // Prompts user with 3 options
     cout << "Please select an option:" << endl;
     cout << "1. Knuth-Morris-Pratt (KMP) Search" << endl;
