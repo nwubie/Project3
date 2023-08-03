@@ -4,14 +4,13 @@
 #include <string>
 #include <fstream>
 #include <unordered_map>
-#include <bits/stdc++.h>
 using namespace std;
 
 void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorithm, using bad character heuristic
-    int count = 0; //# occurrences in the text
+    int count = 0; // # occurrences in the text
     int patSize = pattern.length();
     int txtSize = txt.length();
-    unordered_map<char, int> badChar; //this is used to shift characters if found
+    unordered_map<char, int> badChar; // this is used to shift characters if found
 
     for (int i = 0; i < patSize; i++) {
         badChar[pattern[i]] = max(1, (patSize - i - 1));
@@ -33,7 +32,7 @@ void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorith
             i += max(badChar[txt[i]], (patSize - j));
         }
     }
-    cout << "Occurences: " << count << " ";
+    cout << "Occurrences: " << count << endl;
 }
 
 // A function used to load the contents of a .txt file, returns a string
@@ -44,7 +43,6 @@ bool LoadFile(string filename, string& file_content) {
     {
         string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
         file_content = text;
-        cout << text << endl << endl;
         return true;
     }
     // If the file does not exist
@@ -65,16 +63,17 @@ int main() {
         do {
             cout << "Load a .txt file:" << endl;
             cin >> filename;
-            
+
             validFile = LoadFile(filename, file_content);
         } while (!validFile);
-        
+
         // Prompts user with 3 options
         cout << "Please select an option:" << endl;
         cout << "1. Knuth-Morris-Pratt (KMP) Search" << endl;
         cout << "2. Boyer-Moore (BM) Search" << endl;
-        cout << "3. Exit" << endl;
-    
+        cout << "3. Full Search (KMP vs. BM)" << endl;
+        cout << "4. Exit" << endl;
+
         int option = -1;
         do {
             cin >> option;
@@ -83,14 +82,19 @@ int main() {
             }
         } while (option < 1 || option > 3);
         string word;
-    
+
         switch(option)
         {
             //
             case 1: {
                 cout << "Enter a string to 'KMP' Search:" << endl;
                 cin >> word;
+                clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
+                start = clock();
                 // KMPSearch(file_content, word);
+                stop = clock();
+                double duration = double(stop - start) / double(CLOCKS_PER_SEC);
+                cout << "Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl << endl;
                 continue;
             }
             //
@@ -98,15 +102,33 @@ int main() {
                 cout << "Enter a string to 'BM' Search:" << endl;
                 cin >> word;
                 clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
-                start = clock(); 
+                start = clock();
                 BMSearch(file_content, word);
                 stop = clock();
                 double duration = double(stop - start) / double(CLOCKS_PER_SEC);
-                cout << "Time: " << fixed << setprecision(7) << duration << " seconds" << endl << endl;
+                cout << "Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl << endl;
                 continue;
             }
-            // Exits the program
+            // performs
             case 3: {
+                cout << "Enter a string to Full Search:" << endl;
+                cin >> word;
+
+                clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
+                start = clock();
+                // BMSearch(file_content, word);
+                stop = clock();
+                double duration = double(stop - start) / double(CLOCKS_PER_SEC);
+                cout << "'KMP' Search Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl;
+
+                start = clock();
+                BMSearch(file_content, word);
+                stop = clock();
+                duration = double(stop - start) / double(CLOCKS_PER_SEC);
+                cout << "'BM' Search Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl;
+            }
+            // Exits the program
+            case 4: {
                 program = false;
                 break;
             }
