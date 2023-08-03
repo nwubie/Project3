@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <unordered_map>
+#include "KMP.h"
 using namespace std;
 
 void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorithm, using bad character heuristic
@@ -55,7 +56,7 @@ bool LoadFile(string filename, string& file_content) {
 
 int main() {
     bool program = true;
-    while (program) {
+    
         // Prompts user to input a .txt file to load, file must be in 'cmake-build-debug' folder
         string filename;
         string file_content = "";
@@ -67,6 +68,7 @@ int main() {
             validFile = LoadFile(filename, file_content);
         } while (!validFile);
 
+    while (program) {
         // Prompts user with 3 options
         cout << "Please select an option:" << endl;
         cout << "1. Knuth-Morris-Pratt (KMP) Search" << endl;
@@ -77,10 +79,10 @@ int main() {
         int option = -1;
         do {
             cin >> option;
-            if (option < 1 || option > 3) {
+            if (option < 1 || option > 4) {
                 cout << "Enter a valid option!" << endl;
             }
-        } while (option < 1 || option > 3);
+        } while (option < 1 || option > 4);
         string word;
 
         switch(option)
@@ -91,7 +93,7 @@ int main() {
                 cin >> word;
                 clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
                 start = clock();
-                // KMPSearch(file_content, word);
+                numOfOccurrances(word, file_content);
                 stop = clock();
                 double duration = double(stop - start) / double(CLOCKS_PER_SEC);
                 cout << "Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl << endl;
@@ -116,7 +118,7 @@ int main() {
 
                 clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
                 start = clock();
-                // BMSearch(file_content, word);
+                numOfOccurrances(word, file_content);
                 stop = clock();
                 double duration = double(stop - start) / double(CLOCKS_PER_SEC);
                 cout << "'KMP' Search Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl;
@@ -126,11 +128,13 @@ int main() {
                 stop = clock();
                 duration = double(stop - start) / double(CLOCKS_PER_SEC);
                 cout << "'BM' Search Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl;
+
+                continue;
             }
             // Exits the program
             case 4: {
                 program = false;
-                break;
+                continue;
             }
             default: {
                 program = true;
