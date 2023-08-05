@@ -5,36 +5,8 @@
 #include <fstream>
 #include <unordered_map>
 #include "KMP.h"
+#include "BM.h"
 using namespace std;
-
-void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorithm, using bad character heuristic
-    int count = 0; // # occurrences in the text
-    int patSize = pattern.length();
-    int txtSize = txt.length();
-    unordered_map<char, int> badChar; // this is used to shift characters if found
-
-    for (int i = 0; i < patSize; i++) {
-        badChar[pattern[i]] = max(1, (patSize - i - 1));
-    }
-
-    int i = patSize - 1;
-    while (i < txtSize) {
-        int j = patSize - 1;
-        while (j >= 0 && txt[i] == pattern[j]) {
-            i--;
-            j--;
-        }
-
-        if (j == -1) {
-            count++;
-            i += patSize + 1;
-        }
-        else {
-            i += max(badChar[txt[i]], (patSize - j));
-        }
-    }
-    cout << "Occurrences: " << count << endl;
-}
 
 // A function used to load the contents of a .txt file, returns a string
 bool LoadFile(string filename, string& file_content) {
@@ -76,16 +48,27 @@ int main() {
         cout << "3. Full Search (KMP vs. BM)" << endl;
         cout << "4. Exit" << endl;
 
-        int option = -1;
+        string option = ""; //needs to be a string and then convert to an int, the program broke when I entered a letter and kept printing else the cout statement
+        int opt = -1;
+        bool validOpt = false;
         do {
             cin >> option;
-            if (option < 1 || option > 4) {
-                cout << "Enter a valid option!" << endl;
+            
+            try { 
+                opt = stoi(option);
+            } catch (exception e) {
+               
             }
-        } while (option < 1 || option > 4);
+
+            if (opt < 1 || opt > 4) {
+                cout << "Enter a valid option!" << endl;
+            } else {
+                validOpt = true;
+            }
+        } while (!validOpt);
         string word;
 
-        switch(option)
+        switch(opt)
         {
             //
             case 1: {

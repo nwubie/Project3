@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "KMP.h"
 using namespace std;
 
 vector<int> buildLps(string s) //creates the lps array needed for KMP algorithm
