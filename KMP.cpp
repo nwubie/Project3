@@ -1,7 +1,6 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include "KMP.h"
 using namespace std;
 
 vector<int> buildLps(string s) //creates the lps array needed for KMP algorithm
@@ -55,21 +54,39 @@ int patternInText(string pattern, string text) //returns the location of the sta
 {
     vector<int> lps = buildLps(pattern);
 
-    int i = 0; int j = 0;
+    int i = 0; int j = 0; int occurrances = 0;
+    bool flag = false;
 
     while (i < text.length())
     {
         if (text[i] == pattern[j])
         {
+            
             while (text[i] == pattern[j])
             {
-                i++; j++;
+                //i++; 
+                j++;
                 if (j == pattern.length()) //we found it!   
                 {
-                    return (i - pattern.length());
+                    occurrances++;
+                    j = lps.at(j-1);
+                    //flag = true;
+                    
+
                 }
+                
+                
             }
-            j = lps.at(j-1); //when no longer matching
+            
+                j = lps.at(j-1); //when no longer matching
+            
+            
+            
+            
+            
+            
+            
+            
             
            
             
@@ -77,14 +94,57 @@ int patternInText(string pattern, string text) //returns the location of the sta
         else
         {
             i++;
+            if (j != 0)
+            {
+                j = lps.at(j-1);
+            }
         }
         
         
     }
 
-    return -1;
+    return occurrances;
     
 
+}
+
+void KMPSearch(string pattern, string text)
+{
+    vector<int> lps = buildLps(pattern);
+
+    int i = 0; int j = 0; int occurrances = 0;
+
+    while ((text.length() - i) >= (pattern.length() - j))
+    {
+        if (text[i] == pattern[j])
+        {
+            i++; j++;
+        }
+
+        if ( j == pattern.length())
+        {
+            occurrances++;
+            j = lps.at(j-1);
+        }
+
+        else if (i < text.length() && text[i] != pattern[j])
+        {
+            if (j != 0)
+            {
+                j = lps.at(j-1);
+            }
+            else
+            {
+                i++;
+            }
+            
+        }
+        
+        
+    }
+
+    cout << "Occurrences: " << occurrances << endl;
+    
 }
 
 void numOfOccurrances(string pattern, string text)

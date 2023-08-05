@@ -76,7 +76,7 @@ int main() {
                 cin >> word;
                 clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
                 start = clock();
-                numOfOccurrances(word, file_content);
+                KMPSearch(word, file_content);
                 stop = clock();
                 double duration = double(stop - start) / double(CLOCKS_PER_SEC);
                 cout << "Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl << endl;
@@ -101,7 +101,7 @@ int main() {
 
                 clock_t start, stop; //time/clock function to measure seconds https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
                 start = clock();
-                numOfOccurrances(word, file_content);
+                KMPSearch(word, file_content);
                 stop = clock();
                 double duration = double(stop - start) / double(CLOCKS_PER_SEC);
                 cout << "'KMP' Search Execution Time: " << fixed << setprecision(7) << duration << " seconds" << endl;

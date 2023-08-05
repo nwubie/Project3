@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include <iomanip>
-#include "BM.h"
+
 using namespace std;
 
 void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorithm, using bad character heuristic
@@ -35,4 +35,3 @@ void BMSearch(const string& txt, const string& pattern) { //Boyer-Moore Algorith
     }
     cout << "Occurrences: " << count << endl;
 }
-
